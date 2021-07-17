@@ -22,6 +22,8 @@ namespace hukukDeneme2
           
 
         }
+        // giris ekrani
+        //kullanilmayan sql komutlari mevcut. dokumentasyon sonrasinda o kodlar silinecek
 
         // access veri tabani ile baglanti kurma islemi
        public OleDbConnection baglanti = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\muvekkilVeriTabani\\Database.accdb");
