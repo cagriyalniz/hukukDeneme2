@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DevExpress.XtraEditors;
+
 
 namespace hukukDeneme2
 {
@@ -16,43 +18,65 @@ namespace hukukDeneme2
         public Form1()
         {
             InitializeComponent();
+           
+          
 
-
-            
         }
-        OleDbConnection baglanti = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\muvekkilVeriTabani\\Database.accdb");
 
+        // access veri tabani ile baglanti kurma islemi
+       public OleDbConnection baglanti = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\muvekkilVeriTabani\\Database.accdb");
+        
 
         private void button1_Click(object sender, EventArgs e)
         {
             //giris butonu
 
-            string ad = textBox1.Text;
-            string sifre = textBox2.Text;
+        
+            
+            Form2 frm2 = new Form2(); // giris butonuna tiklayinca ikinci pencerenin acilmasi icin form2'yi olusturdum
+            msgForm frm3 = new msgForm();  // basarili ve basarisiz girislerin bilgisini verecek mesaj kutusunun oluşturdum
 
-            OleDbCommand komut2 = new OleDbCommand();
+            string ad = textBox1.Text; 
+            string sifre = textBox2.Text;
+            // kullanici adi ve sifre kontrolu yapmak icin ilgili textboxlardaki degerlerin alinmasi icin olusturdum
+
+            OleDbCommand komut2 = new OleDbCommand(); // veritabani islemlerini gerceklestirmek icin komut
+
             baglanti.Open();
             komut2.Connection = baglanti;
             komut2.CommandText = "Select * From Tablo1 where kullaniciAdi='" + textBox1.Text + "' AND sifre='" + textBox2.Text + "'";
             OleDbDataReader dr = komut2.ExecuteReader();
+            //veritabanindaki verilerle bir tablo olusturdum. 
+            //kullanici adi ve sifreye yazilan veriler, tabloda eslesiyorsa giris basarili 
+            //eslesmiyorsa basarisiz olacak
+
             if (dr.Read())
             {
-                MessageBox.Show("giriş başarılı");
-                Form2 frm2 = new Form2();
+              
+                frm3.mesaj("Giriş Başarılı");
+                
                 frm2.Show();
-
+                frm3.Show();
+                this.Hide();
+                                                
             }
             else
             {
-                MessageBox.Show("Kullanıcı adı ya da şifre yanlış");
+                               
+                frm3.mesaj("Kullanıcı adı ya da şifre yanlış");
+                frm3.Show();
             }
 
             baglanti.Close();
 
         }
 
-
-
+        //public void deneme(string a)
+        //{
+            
+        //    label2.Text = a;
+        //}
+        
         //private void verileriGoruntule()
         //{
 
@@ -92,21 +116,23 @@ namespace hukukDeneme2
             //cnn.Close();
             //MessageBox.Show("kayıt tamam");
 
-            baglanti.Open();
+            baglanti.Open(); //veritabanini baglanti acildi
+
             OleDbCommand komut = new OleDbCommand("Insert Into tablo1 (kullaniciAdi, Sifre) Values('" + textBox1.Text.ToString() + "' , '" + textBox2.Text.ToString() + "')", baglanti);
             komut.ExecuteNonQuery();
+            //kullanici adi ve sifre veritabanina eklendi
+
             baglanti.Close();
-            MessageBox.Show("kayıt tamam");
+            MessageBox.Show("Kayıt Tamam");
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            // uygulamayi kapatmak icin ozel buton tasarladim
+            // tasarim daha sonra degistirilecek
             Application.Exit();
         }
-
-
-
-
+        
         //private void verileriTemizle()
         //{
         //    baglanti.Open();
@@ -114,5 +140,7 @@ namespace hukukDeneme2
         //    baglanti.Close();
 
         //}
+
+        // textbox ların propertieslerindeki tabindex=0 olan textboxda imleç açılışta gözüküyor
     }
 }
